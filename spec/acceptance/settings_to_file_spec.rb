@@ -24,7 +24,7 @@ describe 'augeas_base::settings_to_file' do
   end
   context 'create and check /etc/puppetlabs/puppet/puppet_test.conf' do
     config_file = '/etc/puppetlabs/puppet/puppet_test.conf'
-    let(:manifest) {
+    manifest =
       <<-EOS
       augeas_base::settings_to_file { '#{config_file}':
         settings => {
@@ -35,7 +35,6 @@ describe 'augeas_base::settings_to_file' do
         },
       }
       EOS
-    }
 
     run_manifest manifest
 
