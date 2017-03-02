@@ -1,4 +1,3 @@
 forge 'http://forge.puppetlabs.com'
-# moduledir 'contrib/vagrant/modules/puppetforge'
 
 mod 'puppetlabs/stdlib'

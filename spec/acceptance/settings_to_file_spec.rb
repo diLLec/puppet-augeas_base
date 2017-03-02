@@ -3,20 +3,19 @@ require 'spec_helper_acceptance'
 describe 'augeas_base::settings_to_file' do
   context 'create and check /etc/ssh/sshd_config_test' do
     config_file = '/etc/ssh/sshd_config_test'
-    let(:manifest) {
-      <<-EOS
-      class { '::augeas_base':
-        default_lens => 'Sshd.lns'
-      }->
-      augeas_base::settings_to_file { '#{config_file}':
-        settings => {
-          'Port'    => '23'
-        },
-      }
-      EOS
+    manifest =
+    <<-EOS
+    class { '::augeas_base':
+      default_lens => 'Sshd.lns'
+    }->
+    augeas_base::settings_to_file { '#{config_file}':
+      settings => {
+        'Port'    => '23'
+      },
     }
+    EOS
 
-    it { run_manifest (manifest) }
+    run_manifest manifest
 
     describe file(config_file) do
       it { should exist }
@@ -38,7 +37,7 @@ describe 'augeas_base::settings_to_file' do
       EOS
     }
 
-    it { run_manifest (manifest) }
+    run_manifest manifest
 
     describe file(config_file) do
       it { should exist }

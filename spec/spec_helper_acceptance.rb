@@ -30,13 +30,17 @@ else
   end
 end
 
-
+# Run manifest when in beaker, skip if local
+#
+# @param manifest A string representation of the manifest
+#
 def run_manifest (manifest)
   if ENV.has_key? 'LOCAL_TEST'
     print 'Notice: Skipping apply_manifest changes, due to local test. Please run puppet apply manually with the manifest above.\n'
   else
     # with local tests, we can't use beaker function like apply_manifest
 
+    let(:manifest) { manifest }
     it 'should run without errors' do
       expect(apply_manifest(manifest, :catch_failures => true).exit_code).to eq(2)
     end

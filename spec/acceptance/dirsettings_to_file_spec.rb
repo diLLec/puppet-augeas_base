@@ -1,30 +1,29 @@
 require 'spec_helper_acceptance'
 
 describe 'augeas_base::dirsettings_to_file' do
-  context 'create and check /etc/ssh/sshd_config_test' do
+  context 'augeas_base::dirsettings_to_file - oversight test' do
     config_file = '/etc/ssh/sshd_config_test'
     specific_user = 'asterisk'
 
-    let(:manifest) {
-      <<-EOS
-      class { '::augeas_base':
-        default_lens => 'Sshd.lns'
-        default_owner => '#{specific_user}'
-      }->
-      augeas_base::dirsettings_to_file { '#{config_file}':
-        dirsettings => {
-          'ChrootDirectory' => '/tmp/myssh'
-        },
-        filesettings => {
-          'HostKey' => '/etc/ssh/ssh_host_key',
-          'HostCertificate' => '/etc/pki/tls/cert.pem',
-          'PidFile' => '/var/run/mysshd.pid'
-        },
-      }
-      EOS
+    manifest =
+    <<-EOS
+    class { '::augeas_base':
+      default_lens => 'Sshd.lns',
+      default_owner => '#{specific_user}'
+    }->
+    augeas_base::dirsettings_to_file { '#{config_file}':
+      dirsettings => {
+        'ChrootDirectory' => '/tmp/myssh'
+      },
+      filesettings => {
+        'HostKey' => '/etc/ssh/ssh_host_key',
+        'HostCertificate' => '/etc/pki/tls/cert.pem',
+        'PidFile' => '/var/run/mysshd.pid'
+      },
     }
+    EOS
 
-    it { run_manifest (manifest) }
+    run_manifest manifest
 
     describe file(config_file) do
       it { should exist }
