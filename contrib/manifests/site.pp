@@ -1,8 +1,14 @@
-augeas_base::settings_to_file { '/etc/puppetlabs/puppet/puppet_test.conf':
-  settings => {
-    'main/certname' => 'agent01.example.com',
-    'main/server'   => 'master.example.com',
-    'agent/report'  => 'true',
-    'master/dns_alt_names' => 'master,master.example.com,puppet,puppet.example.com'
+class { '::augeas_base':
+  default_lens => 'Sshd.lns',
+  default_owner => 'asterisk'
+}->
+augeas_base::dirsettings_to_file { '/etc/ssh/sshd_config_test':
+  dirsettings => {
+    'ChrootDirectory' => '/tmp/myssh'
+  },
+  filesettings => {
+    'HostKey' => '/etc/ssh/ssh_host_key',
+    'HostCertificate' => '/etc/pki/tls/cert.pem',
+    'PidFile' => '/var/run/mysshd.pid'
   },
 }

@@ -8,7 +8,7 @@ describe 'augeas_base::settings_to_file' do
         facts
       end
 
-      relevant_file = '/etc/ssh/sshd_config'
+      relevant_file = '/etc/ssh/sshd_config_test'
       relevant_file_augeas_path = "/files#{relevant_file}"
       let(:title) { relevant_file }
       let(:params) do
@@ -40,6 +40,9 @@ describe 'augeas_base::settings_to_file' do
         }
 
         it { is_expected.to compile }
+        it { is_expected.to contain_class('augeas_base') }
+        it { is_expected.to contain_user('asterisk') }
+        it { is_expected.to contain_group('asterisk') }
         it { is_expected.to contain_augeas_base__settings_to_file(relevant_file) }
         it { is_expected.to contain_file(relevant_file).with_owner(specific_owner).with_group(specific_owner) }
         it { is_expected.to contain_augeas(relevant_file_augeas_path).with_changes(['set "HostKey" "/etc/ssh/ssh_host_key"',

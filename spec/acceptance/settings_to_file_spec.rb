@@ -1,10 +1,4 @@
-
-if ENV.has_key? 'LOCAL_TEST'
-  require 'serverspec'
-  set :backend, :exec
-else
-  require 'spec_helper_acceptance'
-end
+require 'spec_helper_acceptance'
 
 describe 'augeas_base::settings_to_file' do
   context 'create and check /etc/ssh/sshd_config_test' do
@@ -22,19 +16,7 @@ describe 'augeas_base::settings_to_file' do
       EOS
     }
 
-    if ENV.has_key? 'LOCAL_TEST'
-      print 'Notice: Skipping apply_manifest changes, due to local test. Please run puppet apply manually with the manifest above.\n'
-    else
-      # with local tests, we can't use beaker function like apply_manifest
-
-      it 'should run without errors' do
-        expect(apply_manifest(manifest, :catch_failures => true, :trace => true, :debug => true).exit_code).to eq(2)
-      end
-
-      it 'should re-run without changes' do
-        expect(apply_manifest(manifest, :catch_changes => true, :trace => true, :debug => true).exit_code).to be_zero
-      end
-    end
+    it { run_manifest (manifest) }
 
     describe file(config_file) do
       it { should exist }
@@ -56,19 +38,7 @@ describe 'augeas_base::settings_to_file' do
       EOS
     }
 
-    if ENV.has_key? 'LOCAL_TEST'
-      print 'Notice: Skipping apply_manifest changes, due to local test. Please run puppet apply manually with the manifest above.\n'
-    else
-      # with local tests, we can't use beaker function like apply_manifest
-
-      it 'should run without errors' do
-        expect(apply_manifest(manifest, :catch_failures => true, :trace => true, :debug => true).exit_code).to eq(2)
-      end
-
-      it 'should re-run without changes' do
-        expect(apply_manifest(manifest, :catch_changes => true, :trace => true, :debug => true).exit_code).to be_zero
-      end
-    end
+    it { run_manifest (manifest) }
 
     describe file(config_file) do
       it { should exist }

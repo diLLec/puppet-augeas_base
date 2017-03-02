@@ -31,12 +31,12 @@
 # @param specify_lens If set to true, the lens/incl for augeas will be specified, if false the parameters are spared, which enables the autodetection of augeas
 
 define augeas_base::settings_to_file (
-  $settings,
-  $config_file = undef,
-  $additional_context = undef,
-  $lens = undef,
-  $create_if_empty = true,
-  $specify_lens = true,
+  Hash $settings,
+  Optional[String] $config_file = undef,
+  Optional[String] $additional_context = undef,
+  Optional[String] $lens = undef,
+  Optional[Boolean] $create_if_empty = true,
+  Optional[Boolean] $specify_lens = true,
 )  {
 
   validate_legacy('Hash', 'validate_hash', $settings)
@@ -45,16 +45,7 @@ define augeas_base::settings_to_file (
   validate_legacy('String', 'validate_absolute_path', $real_config_file)
 
   $changes = flatten([suffix(prefix(sort(join_keys_to_values($settings, '" "')), 'set "'), '"'), ])
-
-  if $lens != undef {
-    $real_lens = $lens
-  }
-  elsif defined ('::augeas_base') and getvar ('augeas_base::default_lens') != undef {
-    $real_lens = $augeas_base::default_lens
-  }
-  else {
-    $real_lens = 'Puppet.lns'
-  }
+  $real_lens = pick(getvar('augeas_base::default_lens'), $lens, 'Puppet.lns')
 
   $context = $additional_context ? {
     undef   => "/files${real_config_file}",
@@ -62,12 +53,16 @@ define augeas_base::settings_to_file (
   }
 
   if ($create_if_empty) {
-    if defined ('::augeas_base') and getvar ('augeas_base::default_owner') != undef {
+    if getvar ('augeas_base::default_owner') != undef {
       file { $real_config_file:
-        ensure => file,
-        before => Augeas[$context],
-        owner  => $augeas_base::default_owner,
-        group  => $augeas_base::default_owner,
+        ensure  => file,
+        before  => Augeas[$context],
+        owner   => $augeas_base::default_owner,
+        group   => $augeas_base::default_owner,
+        require => [
+          User[$augeas_base::default_owner],
+          Group[$augeas_base::default_owner],
+        ],
       }
     }
     else {
