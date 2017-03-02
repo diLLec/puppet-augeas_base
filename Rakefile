@@ -15,3 +15,12 @@ unless RUBY_VERSION =~ /^1\./
   require 'puppet_blacksmith'
   require 'puppet_blacksmith/rake_tasks'
 end
+
+RSpec::Core::RakeTask.new(:serverspec_local) do |t|
+  t.rspec_opts = ['--color']
+  t.pattern = 'spec/acceptance'
+end
+
+task :serverspec_local do
+  Rake::Task[:serverspec_local].invoke
+end

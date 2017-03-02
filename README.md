@@ -70,3 +70,8 @@ None known.
 
 ## Development
 If you like to contribute, feel free to fork and create pull requests.
+
+### run acceptance tests locally
+To run acceptance tests locally, run this:
+
+    LOCAL_TEST=true rake serverspec_local
