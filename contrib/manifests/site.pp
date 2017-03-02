@@ -1,8 +1,8 @@
-class { '::augeas_base':
-  default_lens => 'Sshd.lns',
-}->
-augeas_base::settings_to_file { '/etc/ssh/sshd_config_test':
+augeas_base::settings_to_file { '/etc/puppetlabs/puppet/puppet_test.conf':
   settings => {
-    'Port'    => '23',
+    'main/certname' => 'agent01.example.com',
+    'main/server'   => 'master.example.com',
+    'agent/report'  => 'true',
+    'master/dns_alt_names' => 'master,master.example.com,puppet,puppet.example.com'
   },
 }

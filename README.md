@@ -71,7 +71,22 @@ None known.
 ## Development
 If you like to contribute, feel free to fork and create pull requests.
 
+### run spec/lint tests
+To run spec/lint tests use the following command
+
+* `vagrant provision --provision-with=spec`
+* `vagrant provision --provision-with=lint`
+* alternatively, ssh to the box and use the cmdline out of `Vagrantfile`
+
 ### run acceptance tests locally
 To run acceptance tests locally, run this:
 
     LOCAL_TEST=true rake serverspec_local
+    
+common way to do that:
+* change `puppet-augeas_base/contrib/manifests/site.pp` to the contents of let(:manifest)
+* run `vagrant provision --provision-with=puppet` on your host
+* exec serverspec_local by one of the following ways:
+** `vagrant provision --provision-with=serverspec_local`
+** ssh into vagrant box and exec the cmdline out of the `Vagrantfile`
+    

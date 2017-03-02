@@ -49,8 +49,7 @@ define augeas_base::settings_to_file (
   if $lens != undef {
     $real_lens = $lens
   }
-  #elsif defined ('::augeas_base') and defined ('::augeas_base::default_lens') and $::augeas_base::default_lens != undef {
-  elsif defined ('::augeas_base') and getvar ('augeas_base::default_lens') {
+  elsif defined ('::augeas_base') and getvar ('augeas_base::default_lens') != undef {
     $real_lens = $augeas_base::default_lens
   }
   else {
@@ -63,9 +62,19 @@ define augeas_base::settings_to_file (
   }
 
   if ($create_if_empty) {
-    file { $real_config_file:
-      ensure => file,
-      before => Augeas[$context],
+    if defined ('::augeas_base') and getvar ('augeas_base::default_owner') != undef {
+      file { $real_config_file:
+        ensure => file,
+        before => Augeas[$context],
+        owner  => $augeas_base::default_owner,
+        group  => $augeas_base::default_owner,
+      }
+    }
+    else {
+      file { $real_config_file:
+        ensure => file,
+        before => Augeas[$context],
+      }
     }
   }
 

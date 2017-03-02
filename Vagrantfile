@@ -10,7 +10,8 @@ Vagrant.configure('2') do |config|
     v.cpus = 2
   end
 
-  config.vm.synced_folder '.', '/etc/puppet/modules/augeas_base', type: 'virtualbox'
+  module_base_directory = '/etc/puppet/modules/augeas_base'
+  config.vm.synced_folder '.', module_base_directory, type: 'virtualbox'
 
   if ENV['http_proxy']
     if Vagrant.has_plugin?('vagrant-proxyconf')
@@ -36,5 +37,11 @@ Vagrant.configure('2') do |config|
     puppet.module_path          = 'contrib/modules'
   end
 
-  config.vm.provision 'spec', type: 'shell', inline: 'cd /etc/puppet/modules/augeas_base && scl enable rh-ruby23 -- bundle exec rake spec'
+  environment_prefix_exec = "cd #{module_base_directory} && scl enable rh-ruby23 --"
+  config.vm.provision 'spec', type: 'shell', inline: "#{environment_prefix_exec} bundle exec rake spec"
+  config.vm.provision 'lint', type: 'shell', inline: "#{environment_prefix_exec} bundle exec rake lint"
+  config.vm.provision 'serverspec_local', type: 'shell' do |s|
+    s.inline = "#{environment_prefix_exec} bundle exec rake serverspec_local"
+    s.env = {:LOCAL_TEST => 'true'}
+  end
 end
