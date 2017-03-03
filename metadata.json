@@ -2,7 +2,7 @@
   "name": "diLLec-augeas_basemodule",
   "version": "0.1.0",
   "author": "diLLec",
-  "summary": "Module which provides tools an abstraction for the work with augeas",
+  "summary": "adds defines to your toolkit, which help to turn settings hashes into configuration files.",
   "license": "Apache-2.0",
   "source": "https://github.com/diLLec/puppet-augeas_base",
   "project_page": "https://github.com/diLLec/puppet-augeas_base",

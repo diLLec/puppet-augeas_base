@@ -23,6 +23,11 @@ matrix:
     - bundle exec rake validate
     - bundle exec rake lint
     - bundle exec rake spec SPEC_OPTS='--format documentation'
+    env: PUPPET_GEM_VERSION="~> 4"
+  - rvm: 2.3.1
+    bundler_args: "--without system_tests"
+    script:
+    - bundle exec rake build
     env: PUPPET_GEM_VERSION="~> 4" DEPLOY_TO_FORGE=yes
   - rvm: default
     sudo: required
@@ -46,6 +51,7 @@ notifications:
   email: false
 deploy:
   provider: puppetforge
+  branch: master
   skip_cleanup: true
   user: dillec
   password:
