@@ -1,0 +1,6 @@
+# Used to ignore directories in puppet module build (rake build)
+#
+/contrib/
+/spec/fixtures
+/vendor/
+/.bundle

@@ -1,7 +1,7 @@
 {
-  "name": "diLLec-augeas_basemodule",
+  "name": "dillec-augeas_base",
   "version": "0.1.0",
-  "author": "diLLec",
+  "author": "dillec",
   "summary": "adds defines to your toolkit, which help to turn settings hashes into configuration files.",
   "license": "Apache-2.0",
   "source": "https://github.com/diLLec/puppet-augeas_base",

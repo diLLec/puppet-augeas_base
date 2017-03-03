@@ -28,6 +28,9 @@ matrix:
     bundler_args: "--without system_tests"
     script:
     - bundle exec rake build
+    - ls -alh .
+    - ls -alh pkg/
+    - find pkg/
     env: PUPPET_GEM_VERSION="~> 4" DEPLOY_TO_FORGE=yes
   - rvm: default
     sudo: required

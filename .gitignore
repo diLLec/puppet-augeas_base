@@ -9,3 +9,5 @@ Gemfile.lock
 /contrib/.tmp/
 /contrib/Puppetfile.lock
 /contrib/manifests/site.pp
+/vendor/
+/.bundle

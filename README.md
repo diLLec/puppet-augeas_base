@@ -19,7 +19,7 @@
 The augeas_base module adds defines to your toolkit, which help to turn settings hashes into
 configuration files. 
 
-## Why I should use augeas_base
+### Why I should use augeas_base?
 This module enables you to use the non-template pattern to create puppet modules. The idea is
 that you completely write configs with puppet by using puppet hashes and the power of augeas
 lenses.
@@ -30,12 +30,11 @@ Commonly used, the pattern looks like this
 * define `$_settings_hash` variable as a parameter to `::yourmodule`
 * use $settings_hash = deep_merge($_settings_hash, $::yourmodule::params::settings_hash) to merge both
 * write settings by using 
-
-
+```puppet
     augeas_base::settings_to_file { '<file>':
         settings => $settings_hash
     }
-
+```
 ## Setup
 ### Setup Requirements
 
@@ -120,6 +119,6 @@ common way to do that:
 * change `puppet-augeas_base/contrib/manifests/site.pp` to the contents of let(:manifest)
 * run `vagrant provision --provision-with=puppet` on your host
 * exec serverspec_local by one of the following ways:
-** `vagrant provision --provision-with=serverspec_local`
-** ssh into vagrant box and exec the cmdline out of the `Vagrantfile`
+    * `vagrant provision --provision-with=serverspec_local`
+    * ssh into vagrant box and exec the cmdline out of the `Vagrantfile`
     
