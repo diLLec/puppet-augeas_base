@@ -57,6 +57,17 @@ class like the following:
     }->
     augeas_base::settings_to_file {...}
 
+### How can I write settings to the same file with multiple settings_to_file or dirsettings_to_file calls
+Just define unique IDs to the defines, and specify the config_file argument. 
+
+    augeas_base:settings_to_file {'settings-/etc/ssh/sshd_config':
+        config_file => '/etc/ssh/sshd_config',
+        ...
+    }
+    augeas_base:dirsettings_to_file {'dirsettings-/etc/ssh/sshd_config':
+        config_file => '/etc/ssh/sshd_config',
+        ...
+    }
 
 ## Reference
 The following defines are added:
@@ -71,6 +82,11 @@ None known.
 ## Development
 If you like to contribute, feel free to fork and create pull requests.
 
+## Tests
+Run all tests
+
+    vagrant provision --provision-with=lint,spec,serverspec_local
+ 
 ### run spec/lint tests
 To run spec/lint tests use the following command
 

@@ -1,10 +1,15 @@
 require 'spec_helper_acceptance'
 
 describe 'augeas_base::settings_to_file' do
-  context 'create and check /etc/ssh/sshd_config_test' do
-    config_file = '/etc/ssh/sshd_config_test'
+  testfile_root = '/root/augeas_base_testfiles'
+
+  context 'create and check sshd_config_test' do
+    config_file = "#{testfile_root}/sshd_config_test"
     manifest =
     <<-EOS
+    file {'#{testfile_root}':
+      ensure => directory
+    }->
     class { '::augeas_base':
       default_lens => 'Sshd.lns'
     }->
@@ -19,13 +24,16 @@ describe 'augeas_base::settings_to_file' do
 
     describe file(config_file) do
       it { should exist }
-      its(:content) { should match /Port 23/ }
+      its(:content) { should match %r{Port 23} }
     end
   end
-  context 'create and check /etc/puppetlabs/puppet/puppet_test.conf' do
-    config_file = '/etc/puppetlabs/puppet/puppet_test.conf'
+  context 'create and check puppet_test.conf' do
+    config_file = "#{testfile_root}/puppet_test.conf"
     manifest =
       <<-EOS
+      file {'#{testfile_root}':
+        ensure => directory
+      }->
       augeas_base::settings_to_file { '#{config_file}':
         settings => {
           'main/certname' => 'agent01.example.com',
@@ -40,9 +48,9 @@ describe 'augeas_base::settings_to_file' do
 
     describe file(config_file) do
       it { should exist }
-      its(:content) { should match /report=true/ }
-      its(:content) { should match /[main]/ }
-      its(:content) { should match /dns_alt_names=master,master.example.com,puppet,puppet.example.com/ }
+      its(:content) { should match %r{report=true} }
+      its(:content) { should match %r{[main]} }
+      its(:content) { should match %r{dns_alt_names=master,master.example.com,puppet,puppet.example.com} }
     end
   end
 end

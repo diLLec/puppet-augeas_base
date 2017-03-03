@@ -27,7 +27,7 @@
 # @param config_file If specified, instead of the title (namevar) this config file is used
 # @param additional_context If specified, the context will be appended by "/<additional_context>"
 # @param lens If specified, the augeas_base::default_lens (if defined), or simply 'Puppet.lns' is used
-# @param create_if_empty If set to true, the config will be created if it does not exist, otherwise not
+# @param manage_file If set to true, the settings_to_file will manage the config_file within a file {} ressource
 # @param specify_lens If set to true, the lens/incl for augeas will be specified, if false the parameters are spared, which enables the autodetection of augeas
 
 define augeas_base::settings_to_file (
@@ -35,7 +35,7 @@ define augeas_base::settings_to_file (
   Optional[String] $config_file = undef,
   Optional[String] $additional_context = undef,
   Optional[String] $lens = undef,
-  Optional[Boolean] $create_if_empty = true,
+  Optional[Boolean] $manage_file = true,
   Optional[Boolean] $specify_lens = true,
 )  {
 
@@ -52,11 +52,11 @@ define augeas_base::settings_to_file (
     default => "/files${real_config_file}/${additional_context}"
   }
 
-  if ($create_if_empty) {
+  if $manage_file and !defined(File[$real_config_file]) {
     if getvar ('augeas_base::default_owner') != undef {
       file { $real_config_file:
         ensure  => file,
-        before  => Augeas[$context],
+        before  => Augeas[$title],
         owner   => $augeas_base::default_owner,
         group   => $augeas_base::default_owner,
         require => [
@@ -68,13 +68,13 @@ define augeas_base::settings_to_file (
     else {
       file { $real_config_file:
         ensure => file,
-        before => Augeas[$context],
+        before => Augeas[$title],
       }
     }
   }
 
   if $specify_lens {
-    augeas { $context:
+    augeas { $title:
       context => $context,
       changes => $changes,
       lens    => $real_lens,
@@ -82,7 +82,7 @@ define augeas_base::settings_to_file (
     }
   }
   else {
-    augeas { $context:
+    augeas { $title:
       context => $context,
       changes => $changes,
     }

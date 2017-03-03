@@ -1,6 +1,6 @@
 class { '::augeas_base':
   default_lens => 'Sshd.lns',
-  default_owner => 'root'
+  default_owner => 'asterisk'
 }->
 augeas_base::dirsettings_to_file { '/etc/ssh/sshd_config_test':
   dirsettings => {

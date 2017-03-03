@@ -8,3 +8,4 @@ Gemfile.lock
 /contrib/.librarian/
 /contrib/.tmp/
 /contrib/Puppetfile.lock
+/contrib/manifests/site.pp
