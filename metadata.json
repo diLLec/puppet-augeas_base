@@ -1,6 +1,6 @@
 {
   "name": "dillec-augeas_base",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "dillec",
   "summary": "adds defines to your toolkit, which help to turn settings hashes into configuration files.",
   "license": "Apache-2.0",
